@@ -16,4 +16,5 @@ iowa_model = DecisionTreeRegressor()
 iowa_model.fit(X, y)
 
 print("First in-sample predictions:", iowa_model.predict(X.head()))
+print("Test")
 print("Actual target values for those homes:", y.head().tolist())
