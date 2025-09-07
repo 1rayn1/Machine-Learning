@@ -9,7 +9,11 @@ example_file_path = 'MLExample.csv'
 
 try:
     #This reads the data into a pandas DataFrame
-    example_data = pd.read_csv(example_file_path)
+    example_data = pd.read_csv(example_file_path, index_col=0)
+    # Display the shape of the data in (rows, columns)
+    example_data.shape
+    # Display the first five lines of the data
+    example_data.head()
 
     if example_data.isnull().any().any():
         raise ValueError("Data contains missing values. Please clean or impute the data before modeling.")
@@ -50,5 +54,3 @@ except ValueError as ve:
     print("ValueError:", ve)
 except Exception as e:
     print("An unexpected error occurred:", e)
-
-
