@@ -19,7 +19,7 @@ extraspace()
 
 
 
-
+#iloc selects by position, loc selects by label
 '''
 table_data = pd.DataFrame([[35,21],[41,34]], columns = ['Apple','Banana'], index = ['Store 1', 'Store 2'])
 print(table_data.Apple)

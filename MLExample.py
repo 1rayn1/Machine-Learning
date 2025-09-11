@@ -5,11 +5,11 @@ from sklearn.tree import DecisionTreeRegressor #used to create the model
 
 
 # Path of the file to read
-example_file_path = 'MLExample.csv'
+example_file_path = 'car data.csv'
 
 try:
     #This reads the data into a pandas DataFrame
-    example_data = pd.read_csv(example_file_path, index_col=0)
+    example_data = pd.read_csv(example_file_path, index_col=0) #index_col=0 uses the first column as the index
     # Display the shape of the data in (rows, columns)
     example_data.shape
     # Display the first five lines of the data
@@ -19,9 +19,9 @@ try:
         raise ValueError("Data contains missing values. Please clean or impute the data before modeling.")
 
     # Create target object and call it y
-    y = example_data.Salary
+    y = example_data.Present_Price
     # Create X(The feature(s) used to make the prediction)
-    features = ['Age']
+    features = ['Year','Selling_Price','Kms_Driven']
     X = example_data[features]
 
     # Split into validation and training data(train_X and train_y are the training data, while val_X and val_y are the validation data)

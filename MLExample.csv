@@ -1,4 +1,104 @@
-Name,Age,City,Salary
-John Doe,30,New York,100000
-Jane Smith,25,Los Angeles,250000
-Peter Jones,42,Chicago,4728390
+Name,Age,City,Salary,Education,Experience,Position
+John Doe,30,New York,100000,Harvard,11,Manager
+Jane Smith,25,Los Angeles,10000,Stanford,6,Clerk
+Peter Jones,42,Chicago,250000,Stanford,18,CEO
+Emily Davis,35,Boston,85000,MIT,12,Engineer
+Michael Brown,28,San Francisco,95000,Berkeley,5,Data Scientist
+Laura Wilson,45,Dallas,120000,Columbia,20,Director
+Kevin Lee,32,Seattle,67000,UCLA,8,Sales Associate
+Anna Kim,29,New York,73000,NYU,6,Product Manager
+Robert Patel,38,Austin,105000,Texas A&M,14,Senior Engineer
+Linda Zhao,50,Chicago,150000,University of Chicago,25,VP of Engineering
+David Chen,31,Houston,87000,Rice,9,Marketing Specialist
+Sofia Martinez,26,Miami,72000,UF,4,UX Designer
+James White,40,Denver,130000,Cornell,16,Project Manager
+Angela Moore,34,San Diego,94000,UCLA,10,Engineer
+Daniel Kim,27,San Jose,76000,UC Berkeley,5,Analyst
+Grace Liu,37,Atlanta,115000,Emory,13,Senior Manager
+Marcus Wright,43,Las Vegas,98000,UNLV,17,Operations Manager
+Olivia Taylor,30,Portland,81000,Oregon,8,QA Engineer
+Samuel Brooks,36,Phoenix,88000,ASU,11,Technical Writer
+Natalie Green,33,Philadelphia,91000,Penn,9,Product Owner
+Joshua Adams,39,Minneapolis,97000,U of Minnesota,14,Developer
+Isabella King,28,Detroit,68000,MSU,6,Support Engineer
+Tyler Reed,41,Indianapolis,99000,Purdue,15,System Architect
+Zoe Hill,24,San Francisco,56000,USF,2,Intern
+Noah Wood,35,Sacramento,84000,UCD,10,UI Designer
+Chloe Scott,31,Denver,86000,CU Boulder,8,Business Analyst
+Leo Turner,44,New Orleans,122000,Tulane,19,Team Lead
+Claire Morgan,29,Orlando,75000,UCF,7,Content Strategist
+Benjamin Ross,38,Salt Lake City,102000,Utah,12,Finance Manager
+Abigail Rogers,27,Boston,78000,Northeastern,5,Marketing Analyst
+Jack Murphy,32,Los Angeles,93000,USC,9,Full Stack Developer
+Mia Barnes,36,Dallas,89000,SMU,11,Data Analyst
+Ethan Hughes,40,Houston,115000,Rice,16,Product Lead
+Avery Bryant,33,Chicago,87000,Loyola,10,Systems Analyst
+Riley Jenkins,48,Seattle,135000,University of Washington,22,IT Manager
+Hailey Simmons,39,Phoenix,95000,ASU,14,Engineer
+Owen Bennett,26,Austin,71000,UT Austin,4,Junior Developer
+Amelia Powell,34,San Diego,92000,UCSD,10,HR Specialist
+Logan Long,45,San Jose,140000,SJSU,20,Technical Lead
+Madison Coleman,30,San Francisco,86000,USF,7,Designer
+Jacob Bell,41,New York,125000,Columbia,17,Operations Director
+Harper Myers,29,Atlanta,80000,Georgia Tech,6,DevOps Engineer
+Elijah Foster,38,Charlotte,98000,UNC,13,Business Consultant
+Evelyn Jenkins,35,Miami,87000,UM,11,Customer Success Manager
+Lucas Price,42,Boston,118000,Harvard,18,Solutions Architect
+Scarlett Bailey,31,Los Angeles,91000,UCLA,8,UI/UX Designer
+Mason Simmons,37,Portland,96000,Oregon State,12,IT Consultant
+Victoria West,28,Chicago,69000,DePaul,5,Data Technician
+Sebastian Nash,39,Philadelphia,102000,Drexel,15,Data Engineer
+Ella Parker,33,Austin,89000,Texas A&M,9,Web Developer
+Anthony Cruz,46,San Antonio,110000,UTSA,21,Project Lead
+Aria Rivera,27,Sacramento,72000,CSU Sacramento,4,Tech Support
+Brandon Keller,31,Phoenix,86000,ASU,7,Engineer
+Melissa Rowe,28,Denver,74000,CU Boulder,5,QA Analyst
+Derek Knight,42,Seattle,122000,University of Washington,18,Product Manager
+Nicole Young,36,Portland,98000,Oregon State,12,UX Designer
+Aaron Lewis,45,Dallas,140000,SMU,20,CTO
+Vanessa Hart,34,San Jose,91000,SJSU,10,Marketing Manager
+Trevor Simmons,38,Chicago,109000,DePaul,15,Project Manager
+Megan Blake,29,New York,78000,NYU,6,Financial Analyst
+Kyle Watson,32,Austin,85000,UT Austin,9,Support Engineer
+Rachel Holmes,41,Boston,130000,Harvard,16,Engineering Manager
+Nathan Cooper,30,Los Angeles,88000,UCLA,7,Business Analyst
+Sydney Ross,25,San Diego,65000,UCSD,3,Data Analyst
+Tyson Perry,33,Houston,93000,Rice,9,System Administrator
+Jillian Tran,35,San Francisco,100000,UC Berkeley,11,UI Designer
+Victor Barnes,40,Atlanta,115000,Georgia Tech,15,Senior Engineer
+Natalie Jensen,27,Miami,72000,UM,4,Recruiter
+Bryan Fuller,44,Charlotte,118000,UNC,20,Operations Manager
+Hannah Mason,26,Orlando,69000,UCF,3,Software Tester
+Spencer Mills,39,Indianapolis,102000,Purdue,14,DevOps Engineer
+Brianna Cross,31,Philadelphia,91000,Penn,8,Content Manager
+Cameron Steele,47,Seattle,135000,University of Washington,22,IT Director
+Jasmine Doyle,33,Chicago,94000,Loyola,10,Communications Lead
+Miles Gibson,38,San Antonio,97000,UTSA,13,Technical Analyst
+Erin Boyd,28,New Orleans,75000,Tulane,5,Designer
+Troy Newton,37,Minneapolis,103000,U of Minnesota,11,Data Engineer
+Caitlin Lowe,30,Las Vegas,79000,UNLV,6,Customer Support Lead
+Julian Powell,43,Phoenix,126000,ASU,19,Strategy Consultant
+Faith Nash,29,Sacramento,81000,UCD,5,UX Researcher
+Chase Ray,36,Denver,98000,CU Boulder,12,Solutions Engineer
+Alana Doyle,32,Los Angeles,88000,USC,8,Product Designer
+Damian Page,39,Chicago,107000,DePaul,15,Sales Manager
+Kelsey Nash,27,New York,73000,Columbia,4,Marketing Analyst
+Alec Sanders,35,Austin,91000,Texas A&M,10,Front-End Developer
+Lauren Drake,31,Houston,92000,Rice,9,HR Manager
+Collin Bishop,45,Boston,145000,MIT,21,Software Architect
+April Foster,34,Philadelphia,90000,Drexel,10,SEO Specialist
+Noel Warner,41,San Diego,108000,UCSD,17,IT Manager
+Mara Neal,26,San Jose,70000,SJSU,3,Junior Developer
+Jared Quinn,40,Dallas,112000,SMU,16,Back-End Developer
+Sierra Tate,29,Atlanta,76000,Emory,5,Email Marketing Manager
+Dominic Wong,38,Los Angeles,99000,UCLA,14,BI Developer
+Jade Grant,33,Portland,87000,Oregon State,9,Operations Analyst
+Tanner Flynn,46,Miami,134000,UM,22,Engineering Director
+Haley Barrett,25,Austin,67000,UT Austin,2,Intern
+Devin Chandler,32,Seattle,95000,University of Washington,8,Test Engineer
+Clarissa Vance,37,New York,97000,Columbia,13,Program Manager
+Frankie Salazar,39,San Francisco,110000,UC Berkeley,14,Cloud Architect
+Eliza Jordan,28,Dallas,79000,UT Dallas,6,Helpdesk Technician
+Keegan Holt,35,Chicago,94000,University of Chicago,11,Systems Analyst
+Addison Brewer,30,Boston,88000,Boston College,7,IT Consultant
+Luis Munoz,44,Phoenix,125000,ASU,18,Platform Engineer
