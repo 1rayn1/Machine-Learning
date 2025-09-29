@@ -1,56 +1,71 @@
-import pandas as pd #used for reading and data manipulation
+import pandas as pd #Loading and Manipulating dataset
+import os #for making sure file paths work and exist
+import joblib # for saving and loading models
+from sklearn.linear_model import SGDRegressor #used to create the model (Regressor type)
+from sklearn.preprocessing import StandardScaler #for normalizing features to have mean 0 and variance 1
 from sklearn.metrics import mean_absolute_error #used to measure model performance
 from sklearn.model_selection import train_test_split #used to split data into training and validation sets
-from sklearn.tree import DecisionTreeRegressor #used to create the model
 
-
-# Path of the file to read
-example_file_path = 'car data.csv'
+# Paths
+file_path = 'car data.csv'
+model_file = 'sgd_car_model.pkl'
+scaler_file = 'scaler.pkl'
 
 try:
-    #This reads the data into a pandas DataFrame
-    example_data = pd.read_csv(example_file_path, index_col=0) #index_col=0 uses the first column as the index
-    # Display the shape of the data in (rows, columns)
-    example_data.shape
-    # Display the first five lines of the data
-    example_data.head()
+    # Load dataset
+    data = pd.read_csv(file_path, index_col=0)
 
-    if example_data.isnull().any().any():
-        raise ValueError("Data contains missing values. Please clean or impute the data before modeling.")
+    # Target and features
+    y = data['Present_Price'].values # target variable
+    features = ['Year', 'Selling_Price', 'Kms_Driven'] # features to use to predict target
+    X = data[features].values # feature matrix
 
-    # Create target object and call it y
-    y = example_data.Present_Price
-    # Create X(The feature(s) used to make the prediction)
-    features = ['Year','Selling_Price','Kms_Driven']
-    X = example_data[features]
+    # Split for evaluation
+    train_X, val_X, train_y, val_y = train_test_split(X, y, random_state=1) # 75% train, 25% validation
 
-    # Split into validation and training data(train_X and train_y are the training data, while val_X and val_y are the validation data)
-    #random_state is set to 1 to ensure reproducibility
-    train_X, val_X, train_y, val_y = train_test_split(X, y, random_state=1)
+    # Load or create scaler for feature normalization
+    #checks if scaler file exists
+    #if it does, load it
+    #if not, create it and save it
+    if os.path.exists(scaler_file):
+        scaler = joblib.load(scaler_file) # load existing scaler
+    else:
+        scaler = StandardScaler()
+        scaler.fit(train_X)
+        joblib.dump(scaler, scaler_file)
 
-    # Creates the model.
-    # Setting random_state to 1 to ensure same results each run
-    iowa_model = DecisionTreeRegressor(random_state=1)
-    # Fits the model into the training data
-    iowa_model.fit(train_X, train_y)
-    #predict() function predicts the salaries for the validation data
-    val_predictions = iowa_model.predict(val_X)
-    #mean_absolute_error() function computes the mean absolute error between the predicted and actual salaries
-    #If mae is low, the model is performing well
-    val_mae = mean_absolute_error(val_predictions, val_y)
-    print("Validation MAE when not specifying max_leaf_nodes: {:,.0f}".format(val_mae))
+    train_X = scaler.transform(train_X) #apply normalization to training data
+    val_X = scaler.transform(val_X) #apply normalization to validation data
+ 
+    # Load or create model
+    if os.path.exists(model_file):
+        print("Loading saved incremental model...")
+        model = joblib.load(model_file)
+    else:
+        print("No saved model found. Creating new incremental model...")
+        model = SGDRegressor(
+            max_iter=1,   # one epoch per partial_fit
+            learning_rate='invscaling',
+            eta0=0.01,
+            warm_start=True,
+            random_state=1
+        )
 
-    # Model is trained again with a specific max_leaf_nodes value(leaf_nodes are the end points of the tree where predictions are made)
-    #Limiting them makes the model simpler and can help prevent overfitting
-    iowa_model = DecisionTreeRegressor(max_leaf_nodes=100, random_state=1)
-    iowa_model.fit(train_X, train_y)
-    val_predictions = iowa_model.predict(val_X)
-    #evaluated with MAE again
-    val_mae = mean_absolute_error(val_predictions, val_y)
-    print("Validation MAE for best value of max_leaf_nodes: {:,.0f}".format(val_mae))
-except FileNotFoundError:
-    print("Error: The file was not found. Check the path and filename.")
-except ValueError as ve:
-    print("ValueError:", ve)
+    # Partial fit (incremental learning)
+    #performs one round of training on the training data
+    model.partial_fit(train_X, train_y)
+
+    # Evaluate
+    #predicts the target values for the validation set
+    #calculates the mean absolute error (MAE) between the predicted and actual target values
+    
+    preds = model.predict(val_X)
+    mae = mean_absolute_error(val_y, preds)
+    print(f"MAE after incremental training: {mae:.2f}")
+
+    # Save model
+    joblib.dump(model, model_file)
+    print("Incremental model saved.")
+
 except Exception as e:
-    print("An unexpected error occurred:", e)
+    print("Error:", e)
