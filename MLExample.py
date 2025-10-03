@@ -11,6 +11,7 @@ file_path = 'car data.csv' #if the csv file changes, update this path
 model_file = 'sgd_car_model.pkl' 
 scaler_file = 'scaler.pkl'
 
+
 while True:
     reset_model = True
 
@@ -37,7 +38,7 @@ while True:
             data = pd.read_csv(file_path, index_col=0)
 
         # Target and features
-
+        
         y = data['Present_Price'].values # target variable 
         #if the csv file changes, update this line
 
@@ -94,6 +95,31 @@ while True:
         # Save model
         joblib.dump(model, model_file)
         print("Incremental model saved.")
+        
+        prediction_input = input("Predict new data? (y/n): ")
+        if prediction_input.lower() != 'y':
+            continue
+        while True:
+            try:
+                print("\nEnter car details to predict Present Price (or type 'exit' to quit):")
+                year = input("Year: ")
+                if year.lower() == 'exit':
+                    break
+                selling_price = input("Selling Price: ")
+                kms_driven = input("Kms Driven: ")
+
+                input_data = [[float(year), float(selling_price), float(kms_driven)]]
+
+                input_scaled = scaler.transform(input_data)
+
+                prediction = model.predict(input_scaled)
+                print(f"Predicted Present Price: ₹{prediction[0]:.2f}")
+            except Exception as pred_error:
+                print("Prediction error:", pred_error)
+        exit_input = input("Exit program? (y/n): ")
+        if exit_input.lower() == 'y':
+            print("Exiting program.")
+            break
 
 
     except Exception as e:
