@@ -73,7 +73,7 @@ def score_dataset(X_train, X_valid, y_train, y_valid):
     preds = model.predict(X_valid)
     return mean_absolute_error(y_valid, preds)
 
-def outlier_removal(score_dataset, X_train, X_valid, y_train, y_valid):
+def missing_value_removal(score_dataset, X_train, X_valid, y_train, y_valid):
 
     cols_with_missing = [col for col in X_train.columns
                         if X_train[col].isnull().any()]
@@ -132,7 +132,7 @@ def main():
 
                 train_X, val_X, train_y, val_y = train_test_split(X, y, random_state=1)
 
-                best_mae = outlier_removal(score_dataset, train_X, val_X, train_y, val_y)
+                best_mae = missing_value_removal(score_dataset, train_X, val_X, train_y, val_y)
                 print(f"Best MAE from outlier/missing value handling: {best_mae}")
 
                 scaler = get_scaler(train_X.values)
