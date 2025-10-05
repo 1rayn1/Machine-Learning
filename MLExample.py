@@ -1,126 +1,124 @@
-import pandas as pd #Loading and Manipulating dataset
-import os #for making sure file paths work and exist
-import joblib # for saving and loading models
-from sklearn.linear_model import SGDRegressor #used to create the model (Regressor type)
-from sklearn.preprocessing import StandardScaler #for normalizing features to have mean 0 and variance 1
-from sklearn.metrics import mean_absolute_error #used to measure model performance
-from sklearn.model_selection import train_test_split #used to split data into training and validation sets
+import pandas as pd
+import os
+import joblib
+from sklearn.linear_model import SGDRegressor
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import mean_absolute_error
+from sklearn.model_selection import train_test_split
 
 # Paths
-file_path = 'car data.csv' #if the csv file changes, update this path
-model_file = 'sgd_car_model.pkl' 
+file_path = 'car data.csv'
+model_file = 'sgd_car_model.pkl'
 scaler_file = 'scaler.pkl'
 
+def load_and_clean_data(path):
+    data = pd.read_csv(path, index_col=0)
+    data = data.dropna(subset=['Present_Price', 'Year', 'Selling_Price', 'Kms_Driven'])
+    return data
 
-while True:
-    reset_model = True
+def get_model(train_X, train_y):
+    if os.path.exists(model_file):
+        print("Loading saved incremental model...")
+        model = joblib.load(model_file)
+    else:
+        print("No saved model found. Creating new incremental model...")
+        model = SGDRegressor(
+            max_iter=1,
+            learning_rate='invscaling',
+            eta0=0.01,
+            warm_start=True,
+            random_state=1
+        )
+    model.partial_fit(train_X, train_y)
+    joblib.dump(model, model_file)
+    print("Incremental model saved.")
+    return model
 
-    inputing = input("Reset data? (y/n): ")
-    if inputing.lower() == "y":
-        reset_model = True
-    elif inputing.lower() == "n":
-        reset_model = False
-    elif inputing.lower() == "quit" or inputing.lower() == "q":
-        print("Exiting program.")
-        break
-    try:
-        # Load dataset
-        # Reset flag: set to True to restart model and scaler from scratch
+def get_scaler(train_X):
+    if os.path.exists(scaler_file):
+        scaler = joblib.load(scaler_file)
+    else:
+        scaler = StandardScaler()
+        scaler.fit(train_X)
+        joblib.dump(scaler, scaler_file)
+    return scaler
 
-        # Delete saved model and scaler if reset is requested
-        if reset_model:
+def predict_price(model, scaler):
+    while True:
+        try:
+            print("\nEnter car details to predict Present Price (or type 'exit' to quit):")
+            year = input("Year: ")
+            if year.lower() == 'exit':
+                break
+            selling_price = input("Selling Price: ")
+            kms_driven = input("Kms Driven: ")
+
+            input_data = [year, selling_price, kms_driven]
+            if not all(x.replace('.', '', 1).isdigit() for x in input_data):
+                print("Please enter valid numeric values.")
+                continue
+
+            input_data = [[float(year), float(selling_price), float(kms_driven)]]
+            input_scaled = scaler.transform(input_data)
+            prediction = model.predict(input_scaled)
+            print(f"Predicted Present Price: ₹{prediction[0]:.2f}")
+        except Exception as pred_error:
+            print("Prediction error:", pred_error)
+
+def main():
+    data = None
+    scaler = None
+    model = None
+    while True:
+        print("\nSelect an action:")
+        print("1. Reset data and model")
+        print("2. Train and evaluate model")
+        print("3. Predict new data")
+        print("4. Exit program")
+        choice = input("Enter your choice (1-4): ").strip()
+
+        if choice == "1":
             if os.path.exists(model_file):
                 os.remove(model_file)
                 print("Deleted saved model.")
             if os.path.exists(scaler_file):
                 os.remove(scaler_file)
                 print("Deleted saved scaler.")
-            data = pd.read_csv(file_path, index_col=0)
+            data = None
+            scaler = None
+            model = None
 
-        # Target and features
-        
-        y = data['Present_Price'].values # target variable 
-        #if the csv file changes, update this line
-
-        features = ['Year', 'Selling_Price', 'Kms_Driven'] # features to use to predict target
-        #if the csv file changes, update this line
-
-        X = data[features].values # feature matrix
-        #if the csv file changes, update this line
-
-        # Split for evaluation
-        train_X, val_X, train_y, val_y = train_test_split(X, y, random_state=1) # 75% train, 25% validation
-
-        #Load or create scaler for feature normalization
-        #checks if scaler file exists
-        #if it does, load it
-        #if not, create it and save it
-        if os.path.exists(scaler_file):
-            scaler = joblib.load(scaler_file) # load existing scaler
-        else:
-            scaler = StandardScaler()
-            scaler.fit(train_X)
-            joblib.dump(scaler, scaler_file)
-
-        train_X = scaler.transform(train_X) #apply normalization to training data
-        val_X = scaler.transform(val_X) #apply normalization to validation data
-    
-        # Load or create model
-        if os.path.exists(model_file):
-            print("Loading saved incremental model...")
-            model = joblib.load(model_file)
-        else:
-            print("No saved model found. Creating new incremental model...")
-            model = SGDRegressor(
-                max_iter=1,   # one epoch per partial_fit
-                learning_rate='invscaling',
-                eta0=0.01,
-                warm_start=True,
-                random_state=1
-            )
-
-        # Partial fit (incremental learning)
-        #performs one round of training on the training data
-        model.partial_fit(train_X, train_y)
-
-        # Evaluate
-        #predicts the target values for the validation set
-        #calculates the mean absolute error (MAE) between the predicted and actual target values
-
-        preds = model.predict(val_X)
-        mae = mean_absolute_error(val_y, preds)
-        print(f"MAE after incremental training: {mae:.2f}")
-
-
-        # Save model
-        joblib.dump(model, model_file)
-        print("Incremental model saved.")
-        
-        prediction_input = input("Predict new data? (y/n): ")
-        if prediction_input.lower() != 'y':
-            continue
-        while True:
+        elif choice == "2":
             try:
-                print("\nEnter car details to predict Present Price (or type 'exit' to quit):")
-                year = input("Year: ")
-                if year.lower() == 'exit':
-                    break
-                selling_price = input("Selling Price: ")
-                kms_driven = input("Kms Driven: ")
+                data = load_and_clean_data(file_path)
+                y = data['Present_Price'].values
+                features = ['Year', 'Selling_Price', 'Kms_Driven']
+                X = data[features].values
 
-                input_data = [[float(year), float(selling_price), float(kms_driven)]]
+                train_X, val_X, train_y, val_y = train_test_split(X, y, random_state=1)
+                scaler = get_scaler(train_X)
+                train_X = scaler.transform(train_X)
+                val_X = scaler.transform(val_X)
 
-                input_scaled = scaler.transform(input_data)
+                model = get_model(train_X, train_y)
+                preds = model.predict(val_X)
+                mae = mean_absolute_error(val_y, preds)
+                print(f"MAE after incremental training: {mae:.2f}")
+            except Exception as e:
+                print("Error during training:", e)
 
-                prediction = model.predict(input_scaled)
-                print(f"Predicted Present Price: ₹{prediction[0]:.2f}")
-            except Exception as pred_error:
-                print("Prediction error:", pred_error)
-        exit_input = input("Exit program? (y/n): ")
-        if exit_input.lower() == 'y':
+        elif choice == "3":
+            if model is None or scaler is None:
+                print("Model and scaler not trained yet. Please train the model first (option 2).")
+            else:
+                predict_price(model, scaler)
+
+        elif choice == "4":
             print("Exiting program.")
             break
 
+        else:
+            print("Invalid choice. Please enter a number between 1 and 4.")
 
-    except Exception as e:
-        print("Error:", e)
+if __name__ == "__main__":
+    main()
